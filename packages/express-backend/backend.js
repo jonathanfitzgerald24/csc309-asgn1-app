@@ -98,8 +98,14 @@ app.post("/users", (req, res) => {
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
-    deleteUser(id);
-    res.send();
+    const userExists = findUserById(id);
+    
+    if (userExists) {
+      deleteUser(id);
+      res.status(204).send();
+    } else {
+      res.status(404).send();
+    }
   });
 
 app.get("/users", (req, res) => {
