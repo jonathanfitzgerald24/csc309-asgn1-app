@@ -51,9 +51,14 @@ const findUsersByNameAndJob = (name, job) => {
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);  
 
+const generateId = () => {
+    return Math.random().toString(36).substring(2, 8);
+  };
+
 const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
+    const userWithId = { ...user, id: generateId() };
+    users["users_list"].push(userWithId);
+    return userWithId;
   };
 
 const deleteUser = (id) => {
@@ -87,8 +92,8 @@ if (result === undefined) {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const newUser = addUser(userToAdd);
+    res.status(201).send(newUser);
   });
 
 app.delete("/users/:id", (req, res) => {
